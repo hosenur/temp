@@ -1,3 +1,6 @@
-const { withUpstash } = require('./scripts/upstash')
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+}
 
-module.exports = withUpstash()
+module.exports = nextConfig
