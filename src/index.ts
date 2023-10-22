@@ -1,24 +1,21 @@
+import { Redis } from "@upstash/redis/cloudflare";
 
 export interface Env {
-	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-	// MY_KV_NAMESPACE: KVNamespace;
-	//
-	// Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-	// MY_DURABLE_OBJECT: DurableObjectNamespace;
-	//
-	// Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-	// MY_BUCKET: R2Bucket;
-	//
-	// Example binding to a Service. Learn more at https://developers.cloudflare.com/workers/runtime-apis/service-bindings/
-	// MY_SERVICE: Fetcher;
-	//
-	// Example binding to a Queue. Learn more at https://developers.cloudflare.com/queues/javascript-apis/
-	// MY_QUEUE: Queue;
+	UPSTASH_REDIS_REST_URL: string;
+	UPSTASH_REDIS_REST_TOKEN: string;
 }
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		//return the pathnames of the request
-		return new Response(request.url)
+		const redis = Redis.fromEnv(env);
+		const slug = request.url.split("/").pop();
+		if (!slug) {
+			return Response.redirect("https://hosenur.dev");
+		}
+		const url = await redis.get(slug) as string;
+		if (url) {
+			return Response.redirect(url);
+		}
+		return Response.redirect("https://hosenur.io");
 	},
 };
