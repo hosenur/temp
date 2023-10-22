@@ -2,8 +2,9 @@
 # EDGY
 
 Redirects on the edge using Cloudflare Workers and Upstash Redis. 
+<img src="demo.gif" raw="true" width="100%">
 
-
+ 
 ## Run Locally
 
 Clone the project
