@@ -8,14 +8,11 @@ export interface Env {
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const redis = Redis.fromEnv(env);
-		const slug = request.url.split("/").pop();
-		if (!slug) {
-			return Response.redirect("https://hosenur.dev");
-		}
+		const slug = request.url.split("/").pop() as string;
 		const url = await redis.get(slug) as string;
-		if (url) {
+		if (slug && url) {
 			return Response.redirect(url);
 		}
-		return Response.redirect("https://hosenur.io");
+		return Response.redirect("https://hosenur.dev");
 	},
 };
